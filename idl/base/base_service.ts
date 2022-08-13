@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
+import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 
 export const protobufPackage = 'base';
@@ -10,17 +11,24 @@ export interface PingRequest {
 
 export interface PingResponse {
   value: string;
+  xid: string;
 }
 
 export const BASE_PACKAGE_NAME = 'base';
 
 export interface BaseServiceClient {
-  ping(request: PingRequest): Observable<PingResponse>;
+  ping(
+    request: PingRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Observable<PingResponse>;
 }
 
 export interface BaseServiceController {
   ping(
     request: PingRequest,
+    metadata: Metadata,
+    ...rest: any
   ): Promise<PingResponse> | Observable<PingResponse> | PingResponse;
 }
 

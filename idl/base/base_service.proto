@@ -8,6 +8,7 @@ message PingRequest {
 
 message PingResponse {
     string value = 1;
+    string xid = 2;
 }
 
 service BaseService {

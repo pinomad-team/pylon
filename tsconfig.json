@@ -13,7 +13,9 @@
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
+    "typeRoots": ["./types"],
     "noImplicitAny": true,
+    "allowJs": true,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true
