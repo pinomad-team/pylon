@@ -1,0 +1,8 @@
+development:
+  grpc:
+    host: localhost:8001
+    secure: false
+production:
+  grpc:
+    host: pylon-4qbqrt2ucq-an.a.run.app # replace me
+    secure: true

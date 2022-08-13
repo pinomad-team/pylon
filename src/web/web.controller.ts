@@ -1,17 +1,30 @@
 import { Body } from '@nestjs/common';
 import { Controller, Post } from '@nestjs/common';
-import { ChannelCredentials, Client } from '@grpc/grpc-js';
+import { Client } from '@grpc/grpc-js';
+import { WebService } from './web.service';
+
+interface UnaryRequestBody {
+  service: string;
+  method: string;
+  request: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer | Uint8Array>;
+}
+
+interface UnaryResponseBody {
+  response: number[];
+}
 
 @Controller('web')
 export class WebController {
+  private client: Client;
+
+  constructor(private readonly webService: WebService) {
+    this.client = webService.getClient();
+  }
+
   @Post()
-  async execute(@Body() payload: any): Promise<any> {
-    const cli = new Client(
-      'localhost:8001',
-      ChannelCredentials.createInsecure(),
-    );
+  async execute(@Body() payload: UnaryRequestBody): Promise<UnaryResponseBody> {
     const rawResponse = await new Promise<Buffer>((resolve, reject) => {
-      cli.makeUnaryRequest<Buffer, Buffer>(
+      this.client.makeUnaryRequest<Buffer, Buffer>(
         `/${payload.service}/${payload.method}`,
         (arg) => arg,
         (arg) => arg,
@@ -20,7 +33,9 @@ export class WebController {
           if (err) {
             return reject(err);
           }
-          return resolve(res!);
+          if (res) {
+            return resolve(res);
+          }
         },
       );
     });
