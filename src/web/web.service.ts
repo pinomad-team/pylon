@@ -11,11 +11,8 @@ interface GrpcConfig {
 export class WebService {
   constructor(private readonly configService: ConfigService) {}
 
-  getClient(): Client {
-    const config = this.configService.get<GrpcConfig>(
-      `${process.env.NODE_ENV || 'development'}.grpc`,
-    )!;
-    console.log(config);
+  getClient(environment = 'development'): Client {
+    const config = this.configService.get<GrpcConfig>(`${environment}.grpc`)!;
     const cli = new Client(
       config?.host,
       config?.secure

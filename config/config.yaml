@@ -2,7 +2,11 @@ development:
   grpc:
     host: localhost:8001
     secure: false
+staging:
+  grpc:
+    host: rpc.staging.pinomad.com
+    secure: true
 production:
   grpc:
-    host: pylon-4qbqrt2ucq-an.a.run.app # replace me
+    host: rpc.pinomad.com
     secure: true
