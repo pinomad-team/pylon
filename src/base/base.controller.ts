@@ -5,7 +5,7 @@ import {
   BaseServiceControllerMethods,
   PingRequest,
   PingResponse,
-} from 'proto/idl/base/base_service';
+} from '@proto/idl/base/base_service';
 import * as xid from 'xid';
 
 @Controller('base')

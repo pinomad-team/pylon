@@ -1,3 +1,4 @@
+import { RootConfigModule } from '@config/module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { WebService } from './web.service';
 
@@ -7,6 +8,7 @@ describe('WebService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [WebService],
+      imports: [RootConfigModule],
     }).compile();
 
     service = module.get<WebService>(WebService);

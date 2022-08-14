@@ -3,7 +3,25 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": ["**/*.proto", {"include": "../config/*.yaml", "outDir": "./dist/config"}],
-    "watchAssets": true
+    "assets": [
+      "**/*.proto",
+      {
+        "include": "../config/*.yaml",
+        "outDir": "./dist/config"
+      }
+    ],
+    "watchAssets": true,
+    "webpack": true
+  },
+  "projects": {
+    "secret-manager": {
+      "type": "library",
+      "root": "libs/secret-manager",
+      "entryFile": "index",
+      "sourceRoot": "libs/secret-manager/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/secret-manager/tsconfig.lib.json"
+      }
+    }
   }
 }

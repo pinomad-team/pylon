@@ -1,15 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from 'config/configuration';
+import { RootConfigModule } from '@config/module';
 import { WebController } from './web.controller';
 import { WebService } from './web.service';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      load: [configuration],
-    }),
-  ],
+  imports: [RootConfigModule],
   controllers: [WebController],
   providers: [WebService],
 })
