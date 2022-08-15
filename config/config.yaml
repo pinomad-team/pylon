@@ -10,11 +10,46 @@ development:
     logging: true
     entities:
       - dist/**/*.entity{.ts,.js}
+    database: defaultdb
+    credentials:
+      type: file
+      path: .secrets/cockroach.yaml
+      key: cockroach
 staging:
   grpc:
     host: rpc.staging.pinomad.com
     secure: true
+  cockroach:
+    host: free-tier6.gcp-asia-southeast1.cockroachlabs.cloud
+    port: 26257
+    secure: true
+    extra:
+      options: "--cluster=pinomad-rdb-3078"
+    synchronize: true
+    logging: false
+    entities:
+      - dist/**/*.entity{.ts,.js}
+    database: db_staging
+    credentials:
+      type: secret_manager
+      path: projects/1071644885799/secrets/staging/versions/latest
+      key: cockroach
 production:
   grpc:
     host: rpc.pinomad.com
     secure: true
+  cockroach:
+    host: free-tier6.gcp-asia-southeast1.cockroachlabs.cloud
+    port: 26257
+    secure: true
+    extra:
+      options: "--cluster=pinomad-rdb-3078"
+    synchronize: true
+    logging: false
+    entities:
+      - dist/**/*.entity{.ts,.js}
+    database: db_production
+    credentials:
+      type: secret_manager
+      path: projects/1071644885799/secrets/production/versions/latest
+      key: cockroach

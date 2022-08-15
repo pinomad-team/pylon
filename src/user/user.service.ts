@@ -47,4 +47,34 @@ export class UserService {
     }
     return userResult;
   }
+
+  async getAllUsers(): Promise<UserAccount[]> {
+    const userResults = await this.usersRepository.find();
+    return userResults;
+  }
+
+  async deleteUser(id: string): Promise<any> {
+    const tx = async (
+      transactionManager: EntityManager,
+    ): Promise<[number, number]> => {
+      const { affected: authAffected } = await transactionManager.delete(
+        UserAuth,
+        {
+          userAccount: {
+            id,
+          },
+        },
+      );
+      const { affected: userAffected } = await transactionManager.delete(
+        UserAccount,
+        {
+          id,
+        },
+      );
+      return [userAffected || 0, authAffected || 0];
+    };
+    const [userAffected] = await this.entityManager.transaction(tx);
+
+    return userAffected;
+  }
 }

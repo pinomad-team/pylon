@@ -8,6 +8,10 @@
       {
         "include": "../config/*",
         "outDir": "./dist/config"
+      },
+      {
+        "include": "../.secrets/*",
+        "outDir": "./dist/.secrets"
       }
     ],
     "watchAssets": true,

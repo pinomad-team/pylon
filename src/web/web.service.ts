@@ -1,6 +1,7 @@
 import { ChannelCredentials, Client } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { CredentialService } from 'src/credential/credential.service';
 
 interface GrpcConfig {
   host: string;
@@ -13,7 +14,6 @@ export class WebService {
 
   getClient(environment = 'development'): Client {
     const config = this.configService.get<GrpcConfig>(`${environment}.grpc`)!;
-    const service = this.configService.get('development.cockroach');
     const cli = new Client(
       config?.host,
       config?.secure

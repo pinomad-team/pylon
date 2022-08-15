@@ -22,6 +22,20 @@ export interface GetUserResponse {
   user: User | undefined;
 }
 
+export interface GetAllUsersRequest {}
+
+export interface GetAllUsersResponse {
+  users: User[];
+}
+
+export interface DeleteUserRequest {
+  id: string;
+}
+
+export interface DeleteUserResponse {
+  ok: boolean;
+}
+
 export const USER_PACKAGE_NAME = 'user';
 
 export interface UserServiceClient {
@@ -36,6 +50,18 @@ export interface UserServiceClient {
     metadata: Metadata,
     ...rest: any
   ): Observable<GetUserResponse>;
+
+  getAllUsers(
+    request: GetAllUsersRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Observable<GetAllUsersResponse>;
+
+  deleteUser(
+    request: DeleteUserRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Observable<DeleteUserResponse>;
 }
 
 export interface UserServiceController {
@@ -53,11 +79,34 @@ export interface UserServiceController {
     metadata: Metadata,
     ...rest: any
   ): Promise<GetUserResponse> | Observable<GetUserResponse> | GetUserResponse;
+
+  getAllUsers(
+    request: GetAllUsersRequest,
+    metadata: Metadata,
+    ...rest: any
+  ):
+    | Promise<GetAllUsersResponse>
+    | Observable<GetAllUsersResponse>
+    | GetAllUsersResponse;
+
+  deleteUser(
+    request: DeleteUserRequest,
+    metadata: Metadata,
+    ...rest: any
+  ):
+    | Promise<DeleteUserResponse>
+    | Observable<DeleteUserResponse>
+    | DeleteUserResponse;
 }
 
 export function UserServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ['createUser', 'getUser'];
+    const grpcMethods: string[] = [
+      'createUser',
+      'getUser',
+      'getAllUsers',
+      'deleteUser',
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
         constructor.prototype,
