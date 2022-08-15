@@ -2,6 +2,14 @@ development:
   grpc:
     host: localhost:8001
     secure: false
+  cockroach:
+    host: localhost
+    port: 26257
+    secure: false
+    synchronize: true
+    logging: true
+    entities:
+      - dist/**/*.entity{.ts,.js}
 staging:
   grpc:
     host: rpc.staging.pinomad.com

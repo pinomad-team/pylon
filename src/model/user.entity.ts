@@ -4,23 +4,21 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  ManyToOne,
+  OneToMany,
   PrimaryColumn,
-  Tree,
-  TreeChildren,
-  TreeParent,
   UpdateDateColumn,
 } from 'typeorm';
 
 export enum AuthType {
-  EMAIL,
-  PHONE_NUMBER,
-  FIREBASE,
-  UNKNOWN,
+  EMAIL = 'EMAIL',
+  PHONE_NUMBER = 'PHONE_NUMBER',
+  FIREBASE = 'FIREBASE',
+  UNKNOWN = 'UNKNOWN',
 }
 
 @Entity()
-@Tree('closure-table')
-export class User {
+export class UserAccount {
   @PrimaryColumn({
     type: 'string',
     unique: true,
@@ -48,7 +46,7 @@ export class User {
     nullable: true,
     default: false,
   })
-  onboarded: boolean;
+  onboarded?: boolean;
 
   @Column({
     type: 'string',
@@ -63,18 +61,18 @@ export class User {
   displayName?: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt?: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt?: Date;
 
-  @TreeChildren()
-  auths: UserAuth[];
+  @OneToMany(() => UserAuth, (auth) => auth.userAccount)
+  auths?: UserAuth[];
 }
 
+@Index(['authType', 'externalId'])
+@Index(['authType', 'userId'])
 @Entity()
-@Tree('closure-table')
-@Index(['externalId'])
 export class UserAuth {
   @PrimaryColumn({
     type: 'string',
@@ -82,23 +80,25 @@ export class UserAuth {
   })
   id: string;
 
-  @TreeParent()
-  user: User;
+  @ManyToOne(() => UserAccount, (account) => account.auths, { cascade: true })
+  userAccount: UserAccount;
 
   @Column({
     type: 'string',
+    nullable: true,
   })
   @Index()
   externalId?: string;
 
   @Column({
     type: 'string',
+    nullable: true,
   })
   @Index()
   userId?: string;
 
   @Column({
-    type: 'enum',
+    type: 'string',
     enum: AuthType,
     default: AuthType.UNKNOWN,
   })

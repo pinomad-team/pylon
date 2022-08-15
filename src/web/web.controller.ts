@@ -2,7 +2,7 @@ import { Body, Headers } from '@nestjs/common';
 import { Controller, Post } from '@nestjs/common';
 import _ from 'lodash';
 import { WebService } from './web.service';
-import { generateGrpcMetadata } from 'src/common/grpc';
+import { generateGrpcMetadata } from '../common/grpc';
 
 interface UnaryRequestBody {
   environment?: string;

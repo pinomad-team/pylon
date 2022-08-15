@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BaseController } from './base/base.controller';
-import { BaseModule } from './base/base.module';
-import { RegisteredGrpcReflectionModule } from './grpc';
+import { DatabaseModule } from './database/database.module';
+import { RpcModule } from './rpc/rpc.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [BaseModule, RegisteredGrpcReflectionModule],
-  controllers: [AppController, BaseController],
+  imports: [DatabaseModule, RpcModule, UserModule],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

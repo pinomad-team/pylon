@@ -6,7 +6,7 @@
     "assets": [
       "**/*.proto",
       {
-        "include": "../config/*.yaml",
+        "include": "../config/*",
         "outDir": "./dist/config"
       }
     ],
@@ -14,14 +14,5 @@
     "webpack": true
   },
   "projects": {
-    "secret-manager": {
-      "type": "library",
-      "root": "libs/secret-manager",
-      "entryFile": "index",
-      "sourceRoot": "libs/secret-manager/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/secret-manager/tsconfig.lib.json"
-      }
-    }
   }
 }

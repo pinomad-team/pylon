@@ -13,6 +13,7 @@ export class WebService {
 
   getClient(environment = 'development'): Client {
     const config = this.configService.get<GrpcConfig>(`${environment}.grpc`)!;
+    const service = this.configService.get('development.cockroach');
     const cli = new Client(
       config?.host,
       config?.secure
