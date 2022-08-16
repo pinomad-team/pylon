@@ -6,6 +6,10 @@
     "assets": [
       "**/*.proto",
       {
+        "include": "../idl/",
+        "outDir": "./dist/idl"
+      },
+      {
         "include": "../config/*",
         "outDir": "./dist/config"
       },

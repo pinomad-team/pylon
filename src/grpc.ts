@@ -10,11 +10,11 @@ export const grpcClientOptions: GrpcOptions = addReflectionToGrpcConfig({
   options: {
     package: ['base', 'user'],
     protoPath: [
-      resolve(__dirname, '../../idl/base/base_service.proto'),
-      resolve(__dirname, '../../idl/user/user_service.proto'),
+      resolve('idl/base/base_service.proto'),
+      resolve('idl/user/user_service.proto'),
     ],
     loader: {
-      includeDirs: [resolve(__dirname, '../../idl/')],
+      includeDirs: ['idl/'],
     },
     url: '0.0.0.0:8001',
   },
