@@ -33,6 +33,7 @@ export class UserService {
   }
 
   async getUser(id: string): Promise<UserAccount | null> {
+    xid.validate(id);
     const userResult = await this.usersRepository.findOneBy({
       id,
     });
