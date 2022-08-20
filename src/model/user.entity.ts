@@ -70,7 +70,7 @@ export class UserAccount {
   auths?: UserAuth[];
 }
 
-@Index(['authType', 'externalId'])
+@Index(['authType', 'externalId'], { unique: true })
 @Index(['authType', 'userId'])
 @Entity()
 export class UserAuth {

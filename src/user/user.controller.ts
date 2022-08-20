@@ -1,6 +1,6 @@
 import { Metadata } from '@grpc/grpc-js';
-import { Controller } from '@nestjs/common';
-import { User } from '@proto/user/user';
+import { Controller, UseInterceptors } from '@nestjs/common';
+import { AuthType, User, UserAuth } from '@proto/user/user';
 import {
   CreateUserRequest,
   CreateUserResponse,
@@ -14,11 +14,35 @@ import {
   UserServiceControllerMethods,
 } from '@proto/user/user_service';
 import { map } from 'lodash';
-import { Observable } from 'rxjs';
+import { FIREBASE_UID_HEADER } from 'src/common/auth';
+import { FirebaseAuthInterceptor } from 'src/firebase-auth.interceptor';
+import {
+  AuthType as AuthTypeEnum,
+  UserAccount,
+  UserAuth as UserAuthEntity,
+} from 'src/model/user.entity';
 import { UserService } from './user.service';
+
+function entityToProtoMapper(user: UserAccount): User {
+  return {
+    id: user.id,
+    onboarded: !!user.onboarded,
+    userAuths: map<UserAuthEntity, UserAuth>(user.auths, (ent) => ({
+      id: ent.id,
+      authType: AuthType[ent.authType],
+      externalId: ent.externalId,
+      userId: ent.userId,
+    })),
+    name: user.name,
+    displayName: user.displayName,
+    createdAt: undefined,
+    modifiedAt: undefined,
+  };
+}
 
 @Controller('user')
 @UserServiceControllerMethods()
+@UseInterceptors(FirebaseAuthInterceptor)
 export class UserController implements UserServiceController {
   constructor(private readonly userService: UserService) {}
   async getAllUsers(
@@ -27,13 +51,7 @@ export class UserController implements UserServiceController {
   ): Promise<GetAllUsersResponse> {
     const users = await this.userService.getAllUsers();
     return {
-      users: map(
-        users,
-        (u): User => ({
-          id: u.id,
-          onboarded: !!u.onboarded,
-        }),
-      ),
+      users: map(users, (user): User => entityToProtoMapper(user)),
     };
   }
 
@@ -52,12 +70,20 @@ export class UserController implements UserServiceController {
     request: CreateUserRequest,
     metadata: Metadata,
   ): Promise<CreateUserResponse> {
-    const user = await this.userService.createUser();
+    const authType = AuthType[request.authType];
+    const uids = metadata.get(FIREBASE_UID_HEADER);
+    let uid;
+    if (uids.length && uids[0]) {
+      uid = uids[0].toString();
+    }
+    const user = await this.userService.createUser(
+      authType as AuthTypeEnum,
+      uid,
+      request.user?.email || request.user?.phoneNumber,
+    );
+
     return {
-      user: {
-        id: user.id,
-        onboarded: false,
-      },
+      user: entityToProtoMapper(user),
     };
   }
 
@@ -69,10 +95,7 @@ export class UserController implements UserServiceController {
     const user = await this.userService.getUser(id);
     if (user) {
       return {
-        user: {
-          id: user?.id,
-          onboarded: false,
-        },
+        user: entityToProtoMapper(user),
       };
     }
     throw new Error(`${id} not found`);

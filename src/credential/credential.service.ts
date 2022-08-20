@@ -19,6 +19,10 @@ export class CredentialService {
     });
   }
 
+  _getCache(): TTLCache<string, any> {
+    return this.secretManagerCache;
+  }
+
   async getCredentials(
     config: CredentialConfig,
   ): Promise<Record<string, any> | any> {

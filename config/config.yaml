@@ -15,6 +15,11 @@ development:
       type: file
       path: .secrets/cockroach.yaml
       key: cockroach
+  firebase:
+    credentials:
+      type: file
+      path: .secrets/firebase.yaml
+      key: firebase
 staging:
   grpc:
     host: rpc.staging.pinomad.com

@@ -19,3 +19,7 @@ export interface CockroachConfig {
   readonly database: string;
   readonly credentials: CredentialConfig;
 }
+
+export interface FirebaseConfig {
+  readonly credentials: CredentialConfig;
+}

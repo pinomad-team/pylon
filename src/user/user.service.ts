@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { UserAccount, UserAuth } from 'src/model/user.entity';
+import { AuthType, UserAccount, UserAuth } from 'src/model/user.entity';
 import { EntityManager, Repository } from 'typeorm';
 import * as xid from 'xid';
 
@@ -15,11 +15,19 @@ export class UserService {
     private readonly userAuthRepository: Repository<UserAuth>,
   ) {}
 
-  async createUser(): Promise<UserAccount> {
+  async createUser(
+    authType: AuthType,
+    externalId?: string,
+    userId?: string,
+  ): Promise<UserAccount> {
+    console.log(userId);
     const authToSave = new UserAuth();
     authToSave.id = xid.generateId();
     const userToSave = new UserAccount();
     userToSave.id = xid.generateId();
+    authToSave.authType = authType;
+    authToSave.externalId = externalId;
+    authToSave.userId = userId;
     const tx = async (
       transactionManager: EntityManager,
     ): Promise<[UserAccount, UserAuth]> => {
@@ -28,7 +36,8 @@ export class UserService {
       const authResult = await transactionManager.save(authToSave);
       return [userResult, authResult];
     };
-    const [userResult] = await tx(this.entityManager);
+    const [userResult, authResult] = await this.entityManager.transaction(tx);
+    userResult.auths = [authResult];
     return userResult;
   }
 

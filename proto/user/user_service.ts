@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import { User } from './user';
+import { AuthType, User } from './user';
 import { Metadata } from '@grpc/grpc-js';
 import { Observable } from 'rxjs';
 
@@ -8,6 +8,7 @@ export const protobufPackage = 'user';
 
 export interface CreateUserRequest {
   user: User | undefined;
+  authType: AuthType;
 }
 
 export interface CreateUserResponse {
