@@ -1,7 +1,6 @@
 import { ChannelCredentials, Client } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CredentialService } from 'src/credential/credential.service';
 
 interface GrpcConfig {
   host: string;
