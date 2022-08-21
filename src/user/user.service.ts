@@ -4,6 +4,11 @@ import { AuthType, UserAccount, UserAuth } from 'src/model/user.entity';
 import { EntityManager, Repository } from 'typeorm';
 import * as xid from 'xid';
 
+export interface AuthTypeAndExternalId {
+  authType: AuthType;
+  externalId: string;
+}
+
 @Injectable()
 export class UserService {
   constructor(
@@ -25,6 +30,7 @@ export class UserService {
     authToSave.id = xid.generateId();
     const userToSave = new UserAccount();
     userToSave.id = xid.generateId();
+    userToSave.onboarded = true;
     authToSave.authType = authType;
     authToSave.externalId = externalId;
     authToSave.userId = userId;
@@ -58,6 +64,31 @@ export class UserService {
     return userResult;
   }
 
+  async getUserByAuthTypeAndExternalId(
+    authType: AuthType,
+    externalId: string,
+  ): Promise<UserAccount | null> {
+    const authResult = await this.userAuthRepository.findOneBy({
+      authType,
+      externalId,
+    });
+
+    if (authResult) {
+      const userResult = await this.usersRepository.findOneBy({
+        id: authResult.userAccount.id,
+      });
+      return userResult;
+    }
+    return null;
+  }
+
+  async updateUser(user: UserAccount): Promise<UserAccount> {
+    xid.validate(user.id);
+    await this.usersRepository.update(user.id, user);
+    const updatedUser = await this.getUser(user.id);
+    return updatedUser!;
+  }
+
   async getAllUsers(): Promise<UserAccount[]> {
     const userResults = await this.usersRepository.find();
     return userResults;
@@ -67,7 +98,7 @@ export class UserService {
     const tx = async (
       transactionManager: EntityManager,
     ): Promise<[number, number]> => {
-      const { affected: authAffected } = await transactionManager.delete(
+      const { affected: authsAffected } = await transactionManager.delete(
         UserAuth,
         {
           userAccount: {
@@ -75,16 +106,16 @@ export class UserService {
           },
         },
       );
-      const { affected: userAffected } = await transactionManager.delete(
+      const { affected: usersAffected } = await transactionManager.delete(
         UserAccount,
         {
           id,
         },
       );
-      return [userAffected || 0, authAffected || 0];
+      return [usersAffected || 0, authsAffected || 0];
     };
-    const [userAffected] = await this.entityManager.transaction(tx);
+    const [usersAffected] = await this.entityManager.transaction(tx);
 
-    return userAffected;
+    return usersAffected;
   }
 }

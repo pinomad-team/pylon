@@ -13,7 +13,7 @@ export enum AuthType {
 
 export interface User {
   id: string;
-  onboarded: boolean;
+  onboarded?: boolean | undefined;
   name?: string | undefined;
   displayName?: string | undefined;
   userAuths: UserAuth[];

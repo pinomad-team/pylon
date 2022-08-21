@@ -15,11 +15,28 @@ export interface CreateUserResponse {
   user: User | undefined;
 }
 
+export interface UpdateUserRequest {
+  user: User | undefined;
+  authType: AuthType;
+}
+
+export interface UpdateUserResponse {
+  user: User | undefined;
+}
+
 export interface GetUserRequest {
   id: string;
 }
 
 export interface GetUserResponse {
+  user: User | undefined;
+}
+
+export interface GetMyProfileRequest {
+  authType: AuthType;
+}
+
+export interface GetMyProfileResponse {
   user: User | undefined;
 }
 
@@ -30,7 +47,7 @@ export interface GetAllUsersResponse {
 }
 
 export interface DeleteUserRequest {
-  id: string;
+  authType: AuthType;
 }
 
 export interface DeleteUserResponse {
@@ -63,6 +80,18 @@ export interface UserServiceClient {
     metadata: Metadata,
     ...rest: any
   ): Observable<DeleteUserResponse>;
+
+  updateUser(
+    request: UpdateUserRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Observable<UpdateUserResponse>;
+
+  getMyProfile(
+    request: GetMyProfileRequest,
+    metadata: Metadata,
+    ...rest: any
+  ): Observable<GetMyProfileResponse>;
 }
 
 export interface UserServiceController {
@@ -98,6 +127,24 @@ export interface UserServiceController {
     | Promise<DeleteUserResponse>
     | Observable<DeleteUserResponse>
     | DeleteUserResponse;
+
+  updateUser(
+    request: UpdateUserRequest,
+    metadata: Metadata,
+    ...rest: any
+  ):
+    | Promise<UpdateUserResponse>
+    | Observable<UpdateUserResponse>
+    | UpdateUserResponse;
+
+  getMyProfile(
+    request: GetMyProfileRequest,
+    metadata: Metadata,
+    ...rest: any
+  ):
+    | Promise<GetMyProfileResponse>
+    | Observable<GetMyProfileResponse>
+    | GetMyProfileResponse;
 }
 
 export function UserServiceControllerMethods() {
@@ -107,6 +154,8 @@ export function UserServiceControllerMethods() {
       'getUser',
       'getAllUsers',
       'deleteUser',
+      'updateUser',
+      'getMyProfile',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(

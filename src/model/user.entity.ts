@@ -80,7 +80,10 @@ export class UserAuth {
   })
   id: string;
 
-  @ManyToOne(() => UserAccount, (account) => account.auths, { cascade: true })
+  @ManyToOne(() => UserAccount, (account) => account.auths, {
+    cascade: true,
+    eager: true,
+  })
   userAccount: UserAccount;
 
   @Column({
