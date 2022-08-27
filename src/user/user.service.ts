@@ -24,6 +24,8 @@ export class UserService {
     authType: AuthType,
     externalId?: string,
     userId?: string,
+    phoneNumber?: string,
+    email?: string,
   ): Promise<UserAccount> {
     console.log(userId);
     const authToSave = new UserAuth();
@@ -31,6 +33,8 @@ export class UserService {
     const userToSave = new UserAccount();
     userToSave.id = xid.generateId();
     userToSave.onboarded = true;
+    userToSave.phoneNumber = phoneNumber;
+    userToSave.email = email;
     authToSave.authType = authType;
     authToSave.externalId = externalId;
     authToSave.userId = userId;

@@ -136,6 +136,8 @@ export class UserController implements UserServiceController {
         authType,
         uid,
         request.user?.email || request.user?.phoneNumber,
+        request.user?.phoneNumber,
+        request.user?.email,
       );
 
       return {
