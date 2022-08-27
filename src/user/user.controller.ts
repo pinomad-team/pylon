@@ -18,6 +18,7 @@ import {
   UserServiceController,
   UserServiceControllerMethods,
 } from '@proto/user/user_service';
+import { GrpcStatusCode } from '@protobuf-ts/grpcweb-transport';
 import { map, merge } from 'lodash';
 import { FIREBASE_UID_HEADER } from 'src/common/auth';
 import { FirebaseAuthInterceptor } from 'src/firebase-auth.interceptor';
@@ -174,9 +175,10 @@ export class UserController implements UserServiceController {
           user: UserController.userEntityToProtoMapper(user),
         };
       }
-      throw new RpcException(
-        `User with ${authTypeWithExternalId.externalId} from not found`,
-      );
+      throw new RpcException({
+        code: GrpcStatusCode.NOT_FOUND,
+        message: `User with ${authTypeWithExternalId.externalId} from not found`,
+      });
     }
     throw new RpcException(`No external ID found`);
   }

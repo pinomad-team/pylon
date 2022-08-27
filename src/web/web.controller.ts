@@ -1,4 +1,4 @@
-import { Body, Headers } from '@nestjs/common';
+import { Body, Headers, HttpException, HttpStatus } from '@nestjs/common';
 import { Controller, Post } from '@nestjs/common';
 import _ from 'lodash';
 import { WebService } from './web.service';
@@ -36,7 +36,17 @@ export class WebController {
           grpcMetadata,
           (err, res) => {
             if (err) {
-              return reject(err);
+              return reject(
+                new HttpException(
+                  {
+                    grpcCode: err.code,
+                    details: err.details,
+                    message: err.message,
+                    metadata: err.metadata.toJSON(),
+                  },
+                  HttpStatus.INTERNAL_SERVER_ERROR,
+                ),
+              );
             }
             if (res) {
               return resolve(res);

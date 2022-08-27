@@ -946,6 +946,26 @@
   resolved "https://registry.yarnpkg.com/@panva/asn1.js/-/asn1.js-1.0.0.tgz#dd55ae7b8129e02049f009408b97c61ccf9032f6"
   integrity sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==
 
+"@protobuf-ts/grpcweb-transport@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@protobuf-ts/grpcweb-transport/-/grpcweb-transport-2.8.0.tgz#e05897077ec0dad72a67482a081a8639817272c5"
+  integrity sha512-zx7sPq3LbwVMBDcYpsKjs8Nel4y8MKTpy1vpne+LkW3M2oie2luOJYwhr24BkZG0absgWYB0HxETXGLxH6TzXA==
+  dependencies:
+    "@protobuf-ts/runtime" "^2.8.0"
+    "@protobuf-ts/runtime-rpc" "^2.8.0"
+
+"@protobuf-ts/runtime-rpc@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime-rpc/-/runtime-rpc-2.8.0.tgz#64053eeb7f04ff8453091096fa7322ff5ff37069"
+  integrity sha512-B8pVorf2BvZZiCcX5paoYIKPDwkrdNP/pmJDKTIQ1D+6Yab1e6caW6vAU4RYJmb0McZBvNhSxvnkwAgPlKaFjw==
+  dependencies:
+    "@protobuf-ts/runtime" "^2.8.0"
+
+"@protobuf-ts/runtime@^2.8.0":
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime/-/runtime-2.8.0.tgz#e5616704fa3310430e35e38d9d291140a9fb2afb"
+  integrity sha512-70LH3oLG5E608jTP+v4nYyinvrpEgkGy0p8gJsog3fwlEuJgARldOQAk+ci5StZUOXHB7MVw0vZ/T0shqIe/pw==
+
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@protobufjs/aspromise/-/aspromise-1.1.2.tgz#9b8b0cc663d669a7d8f6f5d0893a14d348f30fbf"
